@@ -1,62 +1,73 @@
-const $ = (selector) => document.querySelector(selector);
-const $$ = (selector) => document.querySelectorAll(selector);
-
-// const hideElements = (selectors) => {
-//     for (const eachSelector of selectors) {
-//         $(eachSelector).classList.add("visually-hidden");
-//     }
-// };
-
-// const showElements = (selectors) => {
-//     for (const eachSelector of selectors) {
-//         $(eachSelector).classList.remove("visually-hidden");
-//     }
-// };
-
 const renderPokemon = ({ name, sprites, types, id } = data) => {
-    let newcard = `<div id='${id}' class="card" style="width: 10rem;">
-    <img src="${sprites.front_default}" class="card-img-top" alt="pokemon">
-    <div class="card-body">
-      <h5 class="card-title">${name}</h5>
-      <p>Types = ${getTypes(types)}</p>
-      <a href="#" class="btn btn-primary">Go somewhere</a>
-    </div>
-  </div>`;
-    $("#tarjetitas").innerHTML += newcard;
-    $(`#${id}`).addEventListener("mouseover", () => {
-        newcard
-            .querySelector(".card-img-top")
-            .setAttribute("src", `${sprites.back_default}`);
+    const card = document.createElement("div");
+
+    card.id = id;
+    card.className = "card m-3 p-2 shadow";
+    card.style.width = "15rem";
+    card.style.height = "22rem";
+
+    card.innerHTML = `
+    <img src="${
+        sprites.front_default
+    }" class="card-img-top image mx-auto p-2" alt="pokemon">
+    <h5 class="card-title h5 text-center">${name.toUpperCase()}</h5>
+    <div class="card-body p-1 d-flex flex-column justify-content-around">
+       <div class='d-flex justify-content-around'>
+            ${getTypes(types)}
+       </div>
+    </div>`;
+
+    $("#tarjetitas").appendChild(card);
+
+    card.addEventListener("mouseover", () => {
+        card.querySelector(".card-img-top").setAttribute(
+            "src",
+            sprites.back_default
+        );
+        card.querySelector(".card-body").innerHTML = `
+        <div class='d-flex justify-content-around'>
+            <p>Altura</p>
+            <p>Peso</p>
+        </div>
+        <a href="#" class="btn btn-success">Details</a>`;
+    });
+
+    card.addEventListener("mouseout", () => {
+        card.querySelector(".card-img-top").setAttribute(
+            "src",
+            sprites.front_default
+        );
+        card.querySelector(".card-body").innerHTML = `
+            <div class='d-flex justify-content-around'>
+                ${getTypes(types)}
+            </div>`;
     });
 };
-
-// const view = (id) => {
-//     $(`#${id}`).classList.add("visually-hidden");
-//     $$(".card-img-back").forEach((e) => {
-//         e.classList.remove("visually-hidden");
-//     });
-// };
-
-// const noview = (id) => {
-//     $$(".card-img-top").forEach((e) => {
-//         e.classList.remove("visually-hidden");
-//     });
-//     $$(".card-img-back").forEach((e) => {
-//         e.classList.add("visually-hidden");
-//     });
-// };
 
 const getTypes = (types) => {
     let tipos = [];
     types.forEach((tipo) => {
-        tipos.push(tipo.type.name);
+        tipos.push(
+            `<p class='fs-6 px-3 text text-center rounded-5  ${
+                tipo.type.name
+            }'>${tipo.type.name.toUpperCase()}</p>`
+        );
     });
-    return tipos.join(", ");
+    return tipos.join("");
 };
 
-// [...$$(".card")].forEach((card) => {
-//     card.addEventListener("mouseover", () => hideElements(".card-img-top"));
-// });
-// [...$$(".card")].forEach((card) => {
-//     card.addEventListener("mouseout", () => showElements(".card-img-back"));
-// });
+$("#left").addEventListener("click", () => {
+    if (i1 >= 21) {
+        i1 = i1 - 20;
+        i2 = i2 - 20;
+    }
+    pokemones();
+});
+
+$("#right").addEventListener("click", () => {
+    if (i1 >= 1) {
+        i1 = i1 + 20;
+        i2 = i2 + 20;
+    }
+    pokemones();
+});
